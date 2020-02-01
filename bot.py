@@ -41,14 +41,14 @@ def command_handle_document(message):
     bot.reply_to(message, "Я получил присланный Document")
 
 
-Polling = config.endl_work()
+if __name__ == '__main__':
+    bot.polling(none_stop=True)
 
 
 @bot.message_handler(content_types=['text'])
 def mor_msg(message):
     mor_msg = []
     bot.send_message(message.chat.id, mor_msg)
-
 
 schedule.every().day.at("7.00").do(mor_msg)
 while True:
