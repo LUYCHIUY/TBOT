@@ -1,16 +1,16 @@
 import telebot
 import config
-#import schedule
-#import time
+
+# import schedule
+# import time
 
 # import apiai
 # import json
 
 bot = telebot.TeleBot(config.token)
-bot.polling(none_stop=True)
 
 
-@bot.message_handler(command=['start'])
+@bot.message_handler(commands=['start'])
 def start_message(message):
     bot.send_message(message.chat.id, 'Оу , мне написали')
     bot.send_sticker(message.chat.id, 'CAACAgQAAxkBAAIf7V41tb65v4vrhoBt-7ce2pevbf-AAAJ_AANLae4QVPPmclI6esMYBA')
@@ -43,3 +43,6 @@ def command_url(message):
 @bot.message_handler(func=lambda message: message.document.mime_type == 'text/plain', content_types=['document'])
 def command_handle_document(message):
     bot.reply_to(message, "Я получил присланный Document")
+
+
+bot.polling(none_stop=True)
