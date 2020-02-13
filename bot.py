@@ -1,12 +1,6 @@
 import telebot
 import config
 
-import schedule
-import time
-
-# import apiai
-# import json
-
 bot = telebot.TeleBot(config.token)
 bot.infinity_polling(True)
 
@@ -45,15 +39,4 @@ def command_url(message):
 def command_handle_document(message):
     bot.reply_to(message, "Я получил присланный Document")
 
-
-@bot.message_handler(content_types=['text'])
-def mor_msg(message):
-    bot.send_message(message.chat.id, 'Добрый вечер!')
-    bot.send_sticker(message.chat.id, '')
-
-
-schedule.every().day.at("18.36").do(mor_msg)
-
-while True:
-    schedule.run_pending()
-    time.sleep(60)
+bot.polling()
