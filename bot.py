@@ -1,32 +1,19 @@
 import telebot
 import config
-import os
 from flask import Flask, request
-import logging
 
-bot = telebot.TeleBot(config.token)
+secret = 'ghfegc26327jdhs'
+url = 'https://luybimuy.pythonanywhere.com/' + secret
+bot = telebot.TeleBot(config.token, threaded=False)
+bot.remove_webhook()
+bot.set_webhook(url=url)
 
-# Проверим, есть ли переменная окружения Хероку (как ее добавить смотрите ниже)
-if "HEROKU" in list(os.environ.keys()):
-    logger = telebot.logger
-    telebot.logger.setLevel(logging.INFO)
-
-    server = Flask(__name__)
-    @server.route("/bot", methods=['POST'])
-    def getMessage():
-        bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
-        return "!", 200
-    @server.route("/")
-    def webhook():
-        bot.remove_webhook()
-        bot.set_webhook(url="https://dashboard.heroku.com/apps/tbot1283") # этот url нужно заменить на url вашего Хероку приложения
-        return "?", 200
-    server.run(host="0.0.0.0", port=os.environ.get('PORT', 80))
-else:
-    # если переменной окружения HEROKU нету, значит это запуск с машины разработчика.
-    # Удаляем вебхук на всякий случай, и запускаем с обычным поллингом.
-    bot.remove_webhook()
-    bot.polling(none_stop=True)
+app = Flask(__name__)
+@app.route('/'+secret, methods=['POST'])
+def webhook():
+    update = telebot.types.Update.de_json(request.stream.read().decode('utf-8'))
+    bot.process_new_updates([update])
+    return 'ok', 200
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
@@ -61,5 +48,3 @@ def command_url(message):
 @bot.message_handler(func=lambda message: message.document.mime_type == 'text/plain', content_types=['document'])
 def command_handle_document(message):
     bot.reply_to(message, "Я получил присланный Document")
-
-
