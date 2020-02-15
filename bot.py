@@ -2,7 +2,6 @@ import telebot
 import config
 
 bot = telebot.TeleBot(config.token)
-bot.infinity_polling(True)
 
 
 @bot.message_handler(commands=['start'])
@@ -39,4 +38,5 @@ def command_url(message):
 def command_handle_document(message):
     bot.reply_to(message, "Я получил присланный Document")
 
-bot.polling()
+
+bot.infinity_polling(True)
