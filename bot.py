@@ -1,6 +1,7 @@
 import os
 from flask import Flask, request
 import telebot
+import requests
 
 TOKEN = '765437824:AAHiyUz4N8zTuv5Z435i6HNRREiJ2wS1A7I'
 bot = telebot.TeleBot(TOKEN)
@@ -17,7 +18,7 @@ def echo_message(message):
     bot.reply_to(message, message.text)
 
 
-@server.route('/' + TOKEN, methods=['POST'])
+@server.route('/' + TOKEN, methods=['requests.get'])
 def getMessage():
     bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
     return "!", 200
@@ -31,4 +32,4 @@ def webhook():
 
 
 if __name__ == "__main__":
-    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
+    server.run(host="0.0.0.0", port=int(os.environ.get('requests.get', 5000)))
